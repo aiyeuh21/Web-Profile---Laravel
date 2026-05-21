@@ -38,11 +38,15 @@ cd Web-Profile---Laravel
 
 ### Step 2: Install Dependencies
 
+**⚠️ IMPORTANT**: Folders `vendor/` and `node_modules/` are **NOT** included in Git (see `.gitignore`). You MUST install them locally.
+
 #### Backend (PHP/Composer)
 
 ```bash
 composer install
 ```
+
+This downloads all PHP packages listed in `composer.lock` into the `vendor/` folder.
 
 #### Frontend (Node/npm)
 
@@ -50,7 +54,7 @@ composer install
 npm install
 ```
 
-> **Note**: `node_modules/` and `vendor/` directories are **NOT** included in Git (see `.gitignore`). You must run `npm install` and `composer install` after cloning.
+This downloads all JavaScript packages listed in `package-lock.json` into the `node_modules/` folder.
 
 ### Step 3: Environment Setup
 

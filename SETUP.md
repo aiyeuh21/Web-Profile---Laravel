@@ -2,14 +2,54 @@
 
 Panduan lengkap untuk setup project pertama kali setelah clone dari Git.
 
-## ❓ Kenapa `node_modules` & `vendor` tidak ada di Git?
+## ❓ Kenapa `node_modules` & `vendor` TIDAK ada di Git?
 
-Kedua folder ini **terlalu besar** dan akan membuat repository lamban. Sebagai gantinya:
+### 🚫 Folder yang TIDAK di-upload ke Git:
 
-- **`composer.json` & `composer.lock`** menyimpan daftar PHP packages
-- **`package.json` & `package-lock.json`** menyimpan daftar npm packages
+| Folder             | Ukuran      | Alasan                             | Solusi                          |
+| ------------------ | ----------- | ---------------------------------- | ------------------------------- |
+| `vendor/`          | ~200-500 MB | PHP packages - terlalu besar       | `composer install`              |
+| `node_modules/`    | ~300-800 MB | npm packages - terlalu besar       | `npm install`                   |
+| `.env`             | ~ 1 KB      | Sensitive data (password, API key) | Buat `.env` dari `.env.example` |
+| `storage/logs/`    | Variable    | Application logs - temporary       | Auto-generated saat runtime     |
+| `bootstrap/cache/` | Variable    | Cache files - temporary            | Auto-generated saat runtime     |
 
-Setiap developer menjalankan `npm install` dan `composer install` untuk download packages lokal mereka.
+### ✅ Solusi: File Lock & Config
+
+Sebagai gantinya, Git menyimpan **file konfigurasi** yang berisi **daftar packages**:
+
+- **`composer.json` & `composer.lock`** → Daftar lengkap PHP packages & versinya
+- **`package.json` & `package-lock.json`** → Daftar lengkap npm packages & versinya
+
+### 🔄 Workflow Setiap Developer:
+
+1. Clone repository → **Hanya file source + config diterima**
+2. Jalankan `composer install` → **Download dan buat folder `vendor/` lokal**
+3. Jalankan `npm install` → **Download dan buat folder `node_modules/` lokal**
+4. Sekarang siap mengembangkan!
+
+**Keuntungan:**
+
+- Repository tetap kecil & cepat di-clone
+- Setiap developer bisa punya versi packages yang sama (dari lock file)
+- Tidak ada conflict antara developer
+- `.env` tidak ter-share = keamanan terjaga
+
+---
+
+## 🔥 WAJIB Jalankan Pertama Kali Setelah Clone
+
+Jika Anda baru clone repository, **HARUS** jalankan 2 command ini:
+
+```bash
+# WAJIB #1: Install PHP packages
+composer install
+
+# WAJIB #2: Install JavaScript packages
+npm install
+```
+
+**Jika tidak**, folder `vendor/` dan `node_modules/` tidak akan ada, dan aplikasi akan error!
 
 ---
 
@@ -112,18 +152,43 @@ Setelah setup selesai, folder akan terlihat seperti ini:
 
 ```
 Web-Profile---Laravel/
-├── vendor/                  ← PHP packages (auto-created by composer install)
-├── node_modules/           ← npm packages (auto-created by npm install)
-├── .env                     ← Environment config (auto-created dari .env.example)
+├── vendor/                  ← 🚫 NOT IN GIT (PHP packages - auto-created by composer install)
+├── node_modules/           ← 🚫 NOT IN GIT (npm packages - auto-created by npm install)
+├── .env                     ← 🚫 NOT IN GIT (Environment config - create from .env.example)
 ├── public/
-│   └── build/              ← Compiled assets (auto-created by npm run build/dev)
+│   └── build/              ← 🚫 NOT IN GIT (Compiled assets - auto-created by npm run build/dev)
 ├── storage/
-│   └── logs/               ← Application logs
-├── bootstrap/cache/        ← Cache files
-└── ... (other files)
+│   ├── logs/               ← 🚫 NOT IN GIT (Application logs - auto-generated)
+│   └── cache/
+│       └── ... (cache files)
+├── bootstrap/cache/        ← 🚫 NOT IN GIT (Cache files - auto-generated)
+│
+├── app/                     ✅ IN GIT (Source code)
+├── config/                  ✅ IN GIT (Configuration files)
+├── database/                ✅ IN GIT (Migrations & seeders)
+├── resources/               ✅ IN GIT (Views, CSS, JS)
+├── routes/                  ✅ IN GIT (Route definitions)
+├── tests/                   ✅ IN GIT (Test files)
+│
+├── .gitignore              ✅ IN GIT (Specifies what to ignore)
+├── composer.json           ✅ IN GIT (PHP packages list)
+├── composer.lock           ✅ IN GIT (PHP packages lock file)
+├── package.json            ✅ IN GIT (npm packages list)
+├── package-lock.json       ✅ IN GIT (npm packages lock file)
+├── README.md               ✅ IN GIT (Documentation)
+└── ... (other config files)
 ```
 
-**Catatan**: Folder `vendor/`, `node_modules/`, `.env`, dan `public/build/` **TIDAK** ada di Git. Jangan push ke repository!
+### 🚫 TIDAK Ada di Git (di `.gitignore`):
+
+- `vendor/` - PHP packages
+- `node_modules/` - npm packages
+- `.env` - Environment variables
+- `public/build/` - Compiled assets
+- `storage/logs/` - Application logs
+- `bootstrap/cache/` - Cache files
+
+**⚠️ PENTING**: Jangan coba push folder ini ke GitHub. Mereka sudah di `.gitignore` dan akan di-reject oleh Git.
 
 ---
 
