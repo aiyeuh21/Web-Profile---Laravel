@@ -1,58 +1,261 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Web Profile - Laravel
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Personal professional web profile built with Laravel 11, featuring role-based service management and authentication system.
 
-## About Laravel
+## 📋 Project Overview
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+A modern web portfolio application with:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- **Role-based authentication** (Admin & User roles)
+- **Service/Jasa management** (Create, Read, Update, Delete)
+- **WhatsApp integration** for service orders
+- **Professional portfolio sections** (Home, About, Contact, Services)
+- **Responsive design** with Bootstrap 5
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 🔧 Tech Stack
 
-## Learning Laravel
+- **Backend**: Laravel 11
+- **Frontend**: Bootstrap 5, Blade templating
+- **Database**: MySQL/MariaDB
+- **Package Manager**: Composer (PHP), npm (Node)
+- **PHP Version**: 8.2+
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 📦 Installation & Setup
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Prerequisites
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+- PHP 8.2 or higher
+- Composer
+- Node.js & npm
+- MySQL/MariaDB
 
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+### Step 1: Clone Repository
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git clone https://github.com/aiyeuh21/Web-Profile---Laravel.git
+cd Web-Profile---Laravel
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### Step 2: Install Dependencies
 
-## Contributing
+#### Backend (PHP/Composer)
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+composer install
+```
 
-## Code of Conduct
+#### Frontend (Node/npm)
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+npm install
+```
 
-## Security Vulnerabilities
+> **Note**: `node_modules/` and `vendor/` directories are **NOT** included in Git (see `.gitignore`). You must run `npm install` and `composer install` after cloning.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Step 3: Environment Setup
 
-## License
+```bash
+# Copy environment file
+cp .env.example .env
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+# Generate app key
+php artisan key:generate
+```
+
+Edit `.env` with your database credentials:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=your_database_name
+DB_USERNAME=root
+DB_PASSWORD=your_password
+```
+
+### Step 4: Database Setup
+
+```bash
+# Run migrations
+php artisan migrate
+
+# Seed database (creates admin & test users)
+php artisan db:seed
+```
+
+### Step 5: Start Development Server
+
+```bash
+# Terminal 1: Run Laravel development server
+php artisan serve
+
+# Terminal 2: Build assets (watch mode)
+npm run dev
+```
+
+The application will be available at: `http://127.0.0.1:8000`
+
+## 👥 User Roles & Access
+
+### Admin User
+
+- Email: `admin@example.com`
+- Password: `secret123`
+- Permissions: Full CRUD for services/jasa
+
+### Test User
+
+- Email: `test@example.com`
+- Permissions: View services, order via WhatsApp
+
+### Regular Users (via Registration)
+
+- Auto-assigned `user` role upon registration
+- Can only view and order services via WhatsApp
+
+## 🎯 Key Features
+
+### Services (Jasa) Management
+
+- **Admins only**: Create, edit, delete services
+- **All users**: View available services
+- **Regular users**: Order via WhatsApp with pre-filled message
+
+### Authentication
+
+- Registration (auto-assigns `user` role)
+- Login/Logout
+- Role-based access control
+
+### WhatsApp Integration
+
+- Service orders link directly to: `https://wa.me/6289660329648`
+- Pre-filled message format: `"saya tertarik menggunakan jasa {service_name}"`
+
+## 🏗️ Project Structure
+
+```
+├── app/
+│   ├── Http/Controllers/
+│   │   ├── Auth/                    # Authentication controllers
+│   │   └── ServiceController.php    # Service CRUD (admin-protected)
+│   └── Models/
+│       ├── User.php                 # User model with role field
+│       └── Service.php              # Service model
+├── database/
+│   ├── migrations/                  # Database migrations
+│   └── seeders/                     # Database seeders
+├── resources/
+│   ├── views/
+│   │   ├── layouts/                 # Layout templates
+│   │   ├── services/                # Service views
+│   │   ├── auth/                    # Auth views
+│   │   └── index.blade.php          # Home page
+│   └── css/
+│       └── app.css                  # Tailwind/custom styles
+├── routes/
+│   └── web.php                      # Web routes
+├── .gitignore                       # Git ignore rules
+├── package.json                     # npm dependencies
+├── composer.json                    # PHP dependencies
+└── CHANGES.md                       # Detailed changelog
+```
+
+## 🔒 .gitignore Rules
+
+The following directories/files are **NOT** committed to Git:
+
+- `node_modules/` - npm packages (run `npm install`)
+- `vendor/` - Composer packages (run `composer install`)
+- `.env` - Environment variables (create locally)
+- `storage/logs/` - Application logs
+- `bootstrap/cache/` - Cache files
+
+## 🚀 Deployment
+
+### Production Build
+
+```bash
+# Build frontend assets
+npm run build
+
+# Run migrations on production database
+php artisan migrate --force
+```
+
+### Environment Setup for Production
+
+```bash
+php artisan key:generate
+php artisan config:cache
+php artisan route:cache
+```
+
+## 📝 API Endpoints
+
+### Public Routes
+
+- `GET /` - Home page
+- `GET /about` - About page
+- `GET /contact` - Contact page
+
+### Authentication Routes
+
+- `GET/POST /register` - User registration
+- `GET/POST /login` - User login
+- `POST /logout` - User logout
+
+### Service Routes (Protected by auth middleware)
+
+- `GET /services` - List services
+- `GET /services/create` - Create service form (admin only)
+- `POST /services` - Store service (admin only)
+- `GET /services/{id}` - View service detail
+- `GET /services/{id}/edit` - Edit service form (admin only)
+- `PUT /services/{id}` - Update service (admin only)
+- `DELETE /services/{id}` - Delete service (admin only)
+
+## 🐛 Troubleshooting
+
+### Missing node_modules
+
+```bash
+npm install
+```
+
+### Missing vendor (Composer packages)
+
+```bash
+composer install
+```
+
+### Database connection error
+
+- Verify `.env` database credentials
+- Ensure MySQL/MariaDB service is running
+- Check database name exists
+
+### Port 8000 already in use
+
+```bash
+# Use different port
+php artisan serve --port=8001
+```
+
+## 📄 Additional Documentation
+
+See `CHANGES.md` for detailed changelog and feature descriptions.
+
+## 📞 Contact
+
+For inquiries or collaborations:
+
+- WhatsApp: https://wa.me/6289660329648
+- Contact Form: `/contact` page
+
+## 📅 Project Info
+
+- **Created**: May 21, 2026
+- **Framework**: Laravel 11
+- **License**: MIT
+
